@@ -1,0 +1,94 @@
+@mixin hide-text {
+	font: 0/0 a;
+	color: transparent;
+}
+
+@mixin maintain-ratio($width, $height, $background-size: contain) {
+	width: 100%;
+	max-width: $width * 1px;
+	height: 0;
+	padding-bottom: percentage($height / $width);
+	background-size: $background-size;
+}
+
+@mixin replace-text($background-image, $width, $height, $background-size: contain) {
+	@include hide-text;
+	background: url($background-image) no-repeat;
+	@include maintain-ratio($width, $height, $background-size);
+}
+
+// ----------------------------------------------------------
+// == CSS3
+// ----------------------------------------------------------
+
+// = Prefixer
+// -----------------------------
+$prefix-for-webkit:    true !default;
+$prefix-for-mozilla:   true !default;
+$prefix-for-microsoft: true !default;
+$prefix-for-opera:     true !default;
+$prefix-for-spec:      true !default;
+
+@mixin prefixer ($property, $value, $prefixes) {
+	@each $prefix in $prefixes {
+
+		@if $prefix == webkit and $prefix-for-webkit == true {
+			-webkit-#{$property}: $value;
+		}
+		@else if $prefix == moz and $prefix-for-mozilla == true {
+			-moz-#{$property}: $value;
+		}
+		@else if $prefix == ms and $prefix-for-microsoft == true {
+			-ms-#{$property}: $value;
+		}
+		@else if $prefix == o and $prefix-for-opera == true {
+			-o-#{$property}: $value;
+		}
+		@else if $prefix == spec and $prefix-for-spec == true {
+			#{$property}: $value;
+		}
+		@else {
+			@warn "Unrecognized prefix: #{$prefix}";
+		}
+	}
+}
+
+@mixin disable-prefix-for-all() {
+	$prefix-for-webkit:    false;
+	$prefix-for-mozilla:   false;
+	$prefix-for-microsoft: false;
+	$prefix-for-opera:     false;
+	$prefix-for-spec:      false;
+}
+
+// = Border-radius
+// -----------------------------
+@mixin border-radius($radius : 5px) {
+	@include prefixer(border-radius, $radius, moz spec)
+}
+
+@mixin border-top-radius($radius : 5px) {
+	@include prefixer(border-top-left-radius, $radius, moz spec);
+	@include prefixer(border-top-right-radius, $radius, moz spec);
+}
+
+@mixin border-bottom-radius($radius : 5px) {
+	@include prefixer(border-bottom-left-radius, $radius, moz spec);
+	@include prefixer(border-bottom-right-radius, $radius, moz spec);
+}
+
+@mixin border-left-radius($radius : 5px) {
+	@include prefixer(border-top-left-radius, $radius, moz spec);
+	@include prefixer(border-bottom-left-radius, $radius, moz spec);
+}
+
+@mixin border-right-radius($radius : 5px) {
+	@include prefixer(border-top-right-radius, $radius, moz spec);
+	@include prefixer(border-bottom-right-radius, $radius, moz spec);
+}
+
+// = Transition
+// -----------------------------
+@mixin transition ($transition : all .3s ease-in-out) {
+	@include prefixer(transition, $transition, webkit moz ms o spec);
+}
