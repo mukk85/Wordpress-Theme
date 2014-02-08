@@ -1,30 +1,21 @@
 {
-  "name": "YeoPress-Template",
-  "version": "0.0.2",
-  "description": "A basic template for use in YeoPress",
-  "scripts": {
-    "test": ""
-  },
-  "keywords": [
-    "Yeoman",
-    "Wordpress",
-    "YeoPress",
-    "Template"
-  ],
-  "author": "Wes Todd",
-  "license": "BSD",
+  "name": "wp-base",
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-sass": "~0.2.2",
-    "grunt-contrib-jshint": "~0.1.1",
-    "grunt-regarde": "~0.1.1",
-    "grunt-contrib-livereload": "~0.1.0",
-    "grunt-bower-requirejs": "~0.4.1",
-    "grunt-contrib-requirejs": "~0.4.0",
-    "bower": "~0.8.6",
-    "grunt-contrib-imagemin": "~0.1.4",
-    "grunt-svgmin": "~0.1.0",
-	"grunt-contrib-compass": "~0.1.0",
-	"grunt-contrib-uglify": "~0.1.0"
+    "gulp": "~3.4.0",
+    "gulp-livereload": "~0.2.0",
+    "gulp-rename": "~0.2.2",
+    "tiny-lr": "0.0.5",
+    "gulp-clean": "~0.2.4",
+    "gulp-autoprefixer": "0.0.4",
+    "gulp-concat": "~2.1.7",
+    "gulp-minify-css": "~0.2.0",
+    "gulp-uglify": "~0.1.0",
+    "gulp-ruby-sass": "~0.2.0",
+    "gulp-cache": "~0.1.1",
+    "gulp-notify": "~0.3.4-2",
+    "gulp-jshint": "~1.3.4",
+    "gulp-imagemin": "~0.1.4",
+    "gulp-svgmin": "~0.4.1"
   }
 }
+

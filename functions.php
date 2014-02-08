@@ -15,33 +15,43 @@ add_action( 'after_setup_theme', 'theme_setup' );
  * Enqueue styles/scripts
  */
 function theme_enqueue_scripts(){
-	// enqueue jquery from CDN
+	// Load our main stylesheet.
+	wp_enqueue_style( 'fv-style', get_stylesheet_uri() );
 	wp_deregister_script('jquery');
-	wp_register_script('jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js', array(), '1.10.1');
-	wp_enqueue_script('jquery');
-	// use jQuery migrate
-	wp_enqueue_script('jquery-migrate', '//code.jquery.com/jquery-migrate-1.2.1.min.js', array('jquery'), '1.2.1', true);
+
+	if(preg_match('/(?i)msie [1-8]/',$_SERVER['HTTP_USER_AGENT'])) {
+		// IE <= 8 so load older scripts
+		wp_register_script('jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', array(), '1.10.2');
+		$foundationPath = get_stylesheet_directory_uri().'/js/foundation';
+		$foundationVersion = '4.3.0';
+		wp_register_script('fv-optimised', get_template_directory_uri().'/js/min.ie8.js', array('jquery'), '1.0', true);
+	} else {
+		// all other browsers
+		wp_register_script('jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js', array(), '2.0.3');
+		$foundationPath = get_stylesheet_directory_uri().'/bower_components/foundation/js/foundation';
+		$foundationVersion = '5.1.0';
+		wp_register_script('optimised', get_template_directory_uri().'/js/min.js', array('jquery'), '1.0', true);
+	}
 
 	// foundation javascripts
-	wp_register_script('foundation', get_template_directory_uri().'/javascripts/foundation/foundation.js', array('jquery'), '4.2.5', true);
-	wp_register_script('foundation-alerts', get_template_directory_uri().'/javascripts/foundation/foundation.alerts.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-clearing', get_template_directory_uri().'/javascripts/foundation/foundation.clearing.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-cookie', get_template_directory_uri().'/javascripts/foundation/foundation.cookie.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-dropdown', get_template_directory_uri().'/javascripts/foundation/foundation.dropdown.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-forms', get_template_directory_uri().'/javascripts/foundation/foundation.forms.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-interchange', get_template_directory_uri().'/javascripts/foundation/foundation.interchange.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-joyride', get_template_directory_uri().'/javascripts/foundation/foundation.joyride.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-magellan', get_template_directory_uri().'/javascripts/foundation/foundation.magellan.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-orbit', get_template_directory_uri().'/javascripts/foundation/foundation.orbit.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-placeholder', get_template_directory_uri().'/javascripts/foundation/foundation.placeholder.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-reveal', get_template_directory_uri().'/javascripts/foundation/foundation.reveal.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-section', get_template_directory_uri().'/javascripts/foundation/foundation.section.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-tooltips', get_template_directory_uri().'/javascripts/foundation/foundation.tooltips.js', array('foundation'), '4.2.5', true);
-	wp_register_script('foundation-topbar', get_template_directory_uri().'/javascripts/foundation/foundation.topbar.js', array('foundation'), '4.2.5', true);
+	wp_register_script('foundation', $foundationPath.'/foundation.js', array('jquery'), $foundationVersion, true);
+	wp_register_script('foundation-alerts', $foundationPath.'/foundation.alerts.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-clearing', $foundationPath.'/foundation.clearing.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-cookie', $foundationPath.'/foundation.cookie.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-dropdown', $foundationPath.'/foundation.dropdown.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-forms', $foundationPath.'/foundation.forms.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-interchange', $foundationPath.'/foundation.interchange.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-joyride', $foundationPath.'/foundation.joyride.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-magellan', $foundationPath.'/foundation.magellan.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-orbit', $foundationPath.'/foundation.orbit.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-placeholder', $foundationPath.'/foundation.placeholder.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-reveal', $foundationPath.'/foundation.reveal.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-section', $foundationPath.'/foundation.section.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-tooltips', $foundationPath.'/foundation.tooltips.js', array('foundation'), $foundationVersion, true);
+	wp_register_script('foundation-topbar', $foundationPath.'/foundation.topbar.js', array('foundation'), $foundationVersion, true);
 	wp_register_script('modernizr', get_template_directory_uri().'/javascripts/vendor/custom.modernizr.js', array('jquery'), '2.6.2', true);
 
 	// stylesheets
-	wp_enqueue_style('app', get_stylesheet_uri());
 
 	// enqueue scripts
 }
@@ -53,9 +63,7 @@ add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
 function register_menus() {
 	register_nav_menus(
 		array(
-			'main-nav' => 'Main Navigation',
-			'secondary-nav' => 'Secondary Navigation',
-			'sidebar-menu' => 'Sidebar Menu'
+			'primary' => 'Main Navigation'
 		)
 	);
 }
@@ -126,6 +134,15 @@ function twentyeleven_auto_excerpt_more( $more ) {
 }
 add_filter( 'excerpt_more', 'twentyeleven_auto_excerpt_more' );
 
+/**
+ * Get our wp_nav_menu() fallback, wp_page_menu(), to show a home link.
+ */
+function twentyeleven_page_menu_args( $args ) {
+	if ( ! isset( $args['show_home'] ) )
+		$args['show_home'] = true;
+	return $args;
+}
+add_filter( 'wp_page_menu_args', 'twentyeleven_page_menu_args' );
 
 /**
  * Displays navigation to next/previous post when applicable.
