@@ -1,4 +1,6 @@
 <?php
+require get_template_directory() . '/includes/topbar-walker.php';
+
 function theme_setup() {
 	// This theme styles the visual editor with editor-style.css to match the theme style.
 	add_editor_style();
@@ -212,7 +214,7 @@ add_action("admin_menu", "setup_theme_admin_menus");
 function theme_settings_page() {
 	?>
 	<div class="wrap">
-		<?php screen_icon('themes'); ?> <h2>Theme Settings</h2>
+		<h2>Theme Settings</h2>
 		<?php
 		if (isset($_POST["theme_facebook"])) {
 			update_option("social_facebook", esc_url($_POST["theme_facebook"]));
